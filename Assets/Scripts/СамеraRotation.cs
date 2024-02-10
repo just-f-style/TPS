@@ -42,9 +42,6 @@ public class СамеraRotation : MonoBehaviour
 			if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A))
 				RotateBodyAngle = 315;
 
-			if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
-				RotateBodyAngle = 180;
-
 			Body.localEulerAngles = new Vector3(BodyOriginAxisTransform.localEulerAngles.x, Mathf.LerpAngle(Body.localEulerAngles.y, RotateBodyAngle, bodyRotationSpeed * Time.deltaTime), BodyOriginAxisTransform.localEulerAngles.z);
 
 		}
