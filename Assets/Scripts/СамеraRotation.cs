@@ -23,7 +23,7 @@ public class СамеraRotation : MonoBehaviour
 		CameraAxisTransform.localEulerAngles = new Vector3(newXRotationAngle, CameraAxisTransform.localEulerAngles.y, CameraAxisTransform.localEulerAngles.z);
 		if (PlayerController._isMove)
 		{
-			BodyOriginAxisTransform.localEulerAngles = new Vector3(BodyOriginAxisTransform.localEulerAngles.x, CameraAxisTransform.localEulerAngles.y, BodyOriginAxisTransform.localEulerAngles.z);
+			BodyOriginAxisTransform.localEulerAngles = new Vector3(BodyOriginAxisTransform.localEulerAngles.x, BodyOriginAxisTransform.localEulerAngles.y, BodyOriginAxisTransform.localEulerAngles.z);
 			if (Input.GetKey(KeyCode.W))
 				RotateBodyAngle = 0;
 			if (Input.GetKey(KeyCode.D))
@@ -51,7 +51,15 @@ public class СамеraRotation : MonoBehaviour
 		var VectorYRotation = transform.localEulerAngles.y + Time.deltaTime * RotationSpeed * Input.GetAxis("Mouse X");
 		transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, VectorYRotation, transform.localEulerAngles.z);
 
-		
+		var _bodyLocalX = BodyOriginAxisTransform.localEulerAngles.x;
+		_bodyLocalX = Mathf.LerpAngle(BodyOriginAxisTransform.localEulerAngles.x, _bodyLocalX, bodyRotationSpeed * Time.deltaTime);
+		var _bodyLocalY = BodyOriginAxisTransform.localEulerAngles.y;
+		_bodyLocalY = Mathf.LerpAngle(BodyOriginAxisTransform.localEulerAngles.y, _bodyLocalY, bodyRotationSpeed * Time.deltaTime);
+		var _bodyLocalZ = BodyOriginAxisTransform.localEulerAngles.z;
+		_bodyLocalZ = Mathf.LerpAngle(BodyOriginAxisTransform.localEulerAngles.z, _bodyLocalZ, bodyRotationSpeed * Time.deltaTime);
+
+		if(PlayerController._isMove) BodyOriginAxisTransform.localEulerAngles = new Vector3(0 , 0, 0);
+		transform.localEulerAngles.Normalize();
 	}
 	private void CursorHideAndLock()
 	{
@@ -66,6 +74,12 @@ public class СамеraRotation : MonoBehaviour
 
 	void Update()
 	{
+		if (PlayerController._isMove || !PlayerController._characterController.isGrounded)
+		{
+			BodyOriginAxisTransform.SetParent(transform);
+			BodyOriginAxisTransform.position = transform.position;
+		} else BodyOriginAxisTransform.SetParent(null);
+
 		if (!Input.GetKey(KeyCode.LeftAlt))
 		{
 			CameraRotateXAngle();

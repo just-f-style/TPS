@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 _moveVector;
     private float _fallVelocity;
-    private CharacterController _characterController;
+    public static CharacterController _characterController;
     public static bool _isMove;
 
 	void Start()
@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     }
 	private void Update()
 	{
-        _moveVector = Vector3.zero;
+			_moveVector = Vector3.zero;
 
         if (!Input.GetKey(KeyCode.LeftAlt))
         {
@@ -47,12 +47,15 @@ public class PlayerController : MonoBehaviour
 					_fallVelocity = -jumpForce;
 				}
 
-				if (Input.GetKey(KeyCode.W)) _moveVector += transform.forward;
-				if (Input.GetKey(KeyCode.S)) _moveVector -= transform.forward;
 				if (Input.GetKey(KeyCode.D)) _moveVector += transform.right;
 				if (Input.GetKey(KeyCode.A)) _moveVector -= transform.right;
 			}
 			else speed = 2.5f;
+			if (Input.GetKey(KeyCode.W))
+			{
+				_moveVector += transform.forward;
+				if (Input.GetKey(KeyCode.S)) _moveVector -= transform.forward;
+			}
 		}
 		if (_moveVector != Vector3.zero) _isMove = true;
 		else _isMove = false;
