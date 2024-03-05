@@ -15,6 +15,13 @@ public class СамеraRotation : MonoBehaviour
 	public Transform BodyOriginAxisTransform;
 	public Transform Body;
 
+	public Texture2D cursor;
+
+	private void Start()
+	{
+		Cursor.SetCursor(cursor, new Vector2(0.01f, 0.01f), CursorMode.ForceSoftware);
+	}
+
 	private void CameraRotateXAngle()
 	{
 		var newXRotationAngle = CameraAxisTransform.localEulerAngles.x - Time.deltaTime * RotationSpeed * Input.GetAxis("Mouse Y");
@@ -24,6 +31,10 @@ public class СамеraRotation : MonoBehaviour
 		if (PlayerController._isMove)
 		{
 			BodyOriginAxisTransform.localEulerAngles = new Vector3(BodyOriginAxisTransform.localEulerAngles.x, BodyOriginAxisTransform.localEulerAngles.y, BodyOriginAxisTransform.localEulerAngles.z);
+			if (!PickController._isPicked)
+			{
+
+			}
 			if (Input.GetKey(KeyCode.W))
 				RotateBodyAngle = 0;
 			if (Input.GetKey(KeyCode.D))
@@ -42,7 +53,9 @@ public class СамеraRotation : MonoBehaviour
 			if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.A))
 				RotateBodyAngle = 315;
 
-			Body.localEulerAngles = new Vector3(BodyOriginAxisTransform.localEulerAngles.x, Mathf.LerpAngle(Body.localEulerAngles.y, RotateBodyAngle, bodyRotationSpeed * Time.deltaTime), BodyOriginAxisTransform.localEulerAngles.z);
+
+
+            Body.localEulerAngles = new Vector3(BodyOriginAxisTransform.localEulerAngles.x, Mathf.LerpAngle(Body.localEulerAngles.y, RotateBodyAngle, bodyRotationSpeed * Time.deltaTime), BodyOriginAxisTransform.localEulerAngles.z);
 
 		}
 	}

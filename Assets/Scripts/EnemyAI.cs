@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -14,8 +15,11 @@ public class EnemyAI : MonoBehaviour
     public PlayerController player;
     public float viewAngle;
     public float speed;
+    public float fireDistance;
 
-    private int _heatPoints = 100;
+    public bool fire;
+
+    public int heatPoints = 100;
 
     public Slider healthBar;
 
@@ -30,11 +34,19 @@ public class EnemyAI : MonoBehaviour
     {
         if(healthBar.value < 100) healthBar.gameObject.SetActive(true);
         if(healthBar.value == 100) healthBar.gameObject.SetActive(false);
-		healthBar.value = _heatPoints;
+		healthBar.value = heatPoints;
         viewOfPlayer();
+        //followPlayer();
+		//Patrol();
+        Death();
 
-		 Patrol();
-         followPlayer();
+
+		if (_isPlayerNoticed) _agent.stoppingDistance = 10;
+		else _agent.stoppingDistance = 0;
+
+        //if (Vector3.Distance(transform.position, player.transform.position) <= fireDistance && _isPlayerNoticed && bulletCounter > 0)
+        Fire();
+        if (bulletCounter == 0) Reload();
 	}
 
     public List<Transform> patrolPoint;
@@ -48,7 +60,7 @@ public class EnemyAI : MonoBehaviour
 				_agent.destination = patrolPoint[UnityEngine.Random.Range(0, patrolPoint.Count)].position;
 			}
 		}
-    }
+	}
 
     void viewOfPlayer()
     {
@@ -68,12 +80,36 @@ public class EnemyAI : MonoBehaviour
     void followPlayer()
     {
 		if (_isPlayerNoticed) _agent.destination = player.transform.position;
-    }
-
-    public void TakeDamage()
+	}
+	public void Death()
     {
-        _heatPoints -= 20;
-
-        if(_heatPoints <= 0) Destroy(gameObject);
+        if(heatPoints <= 0) Destroy(gameObject);
     }
+
+    public GameObject bullet;
+    public GameObject bulletSpawner;
+    private int bulletCounter = 5;
+	public float reloadTimer = 5;
+    public float waitTime = 1.5f;
+
+	void Fire()
+    {
+        if(waitTime <= 0)
+        {
+			waitTime = 1.5f;
+			reloadTimer = 5;
+			Instantiate(bullet, bulletSpawner.transform.position, bulletSpawner.transform.rotation);
+			bulletCounter--;
+		}
+        else waitTime -= Time.deltaTime;
+    }
+
+	void Reload()
+    {
+        if(bulletCounter == 0)
+        {
+            reloadTimer -= Time.deltaTime;
+        }
+        if (reloadTimer <= 0) bulletCounter = 5;
+	}
 }
