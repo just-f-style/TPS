@@ -19,26 +19,21 @@ public class EnemyAI : MonoBehaviour
 
     public bool fire;
 
-    public int heatPoints = 100;
-
-    public Slider healthBar;
+    private EntityHeatPoints _heatPoints;
 
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
-       
+        _heatPoints = GetComponent<EntityHeatPoints>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(healthBar.value < 100) healthBar.gameObject.SetActive(true);
-        if(healthBar.value == 100) healthBar.gameObject.SetActive(false);
-		healthBar.value = heatPoints;
         viewOfPlayer();
-        //followPlayer();
+		//followPlayer();
 		//Patrol();
-        Death();
+		if (_heatPoints.value <= 0) Death();
 
 
 		if (_isPlayerNoticed) _agent.stoppingDistance = 10;
@@ -83,7 +78,7 @@ public class EnemyAI : MonoBehaviour
 	}
 	public void Death()
     {
-        if(heatPoints <= 0) Destroy(gameObject);
+        Destroy(gameObject);
     }
 
     public GameObject bullet;

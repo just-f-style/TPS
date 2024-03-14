@@ -31,10 +31,6 @@ public class СамеraRotation : MonoBehaviour
 		if (PlayerController._isMove)
 		{
 			BodyOriginAxisTransform.localEulerAngles = new Vector3(BodyOriginAxisTransform.localEulerAngles.x, BodyOriginAxisTransform.localEulerAngles.y, BodyOriginAxisTransform.localEulerAngles.z);
-			if (!PickController._isPicked)
-			{
-
-			}
 			if (Input.GetKey(KeyCode.W))
 				RotateBodyAngle = 0;
 			if (Input.GetKey(KeyCode.D))
@@ -87,7 +83,7 @@ public class СамеraRotation : MonoBehaviour
 
 	void Update()
 	{
-		if (PlayerController._isMove || !PlayerController._characterController.isGrounded)
+		if (PlayerController._isMove || !PlayerController._characterController.isGrounded || Input.GetMouseButton(1))
 		{
 			BodyOriginAxisTransform.SetParent(transform);
 			BodyOriginAxisTransform.position = transform.position;

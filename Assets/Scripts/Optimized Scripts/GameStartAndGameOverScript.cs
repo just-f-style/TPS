@@ -1,28 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class PlayerHeatPointController : MonoBehaviour
+public class GameStartAndGameOverScript : MonoBehaviour
 {
-	public int playerHeatpoints;
+	private EntityHeatPoints heatPoints;
 	public GameObject GameOverScreen;
-	public Slider healthBar;
 
 	public void Start()
 	{
 		Time.timeScale = 1.0f;
+		heatPoints = GetComponent<EntityHeatPoints>();
 	}
 	private void Update()
 	{
 		GameOverActivation();
-		healthBar.value = playerHeatpoints;
-		if(healthBar.value <= 0) healthBar.gameObject.SetActive(false);
-		else healthBar.gameObject.SetActive(true);
 	}
 	public void GameOverActivation()
 	{
-		if (playerHeatpoints <= 0)
+		if (heatPoints.value <= 0)
 		{
 			GameOverScreen.SetActive(true);
 			Time.timeScale = 0;
